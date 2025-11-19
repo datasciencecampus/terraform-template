@@ -1,5 +1,5 @@
-# gcp-cloudbuild-ci-module
-Terraform module enabling reproducible, cross-project CI setups powered by Google Cloud Build.
+# terraform-module-template
+A terraform module template
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
