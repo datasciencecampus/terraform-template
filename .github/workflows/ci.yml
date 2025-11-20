@@ -1,3 +1,5 @@
+# This workflow currently conducts:
+# - pre-commit checks (on all pushes and PRs to main branch)
 name: CI
 
 on:
@@ -5,43 +7,39 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# Restrict default permissions for all jobs (least privilege)
+permissions:
+  contents: read
+
 env:
-  TERRAFORM_VERSION: "1.13.5"
+  TERRAFORM_VERSION: "1.13.5"  # terraform version
 
 jobs:
 
-  lint-and-validate:
-    name: Lint and Validate
+  pre-commit:
+    name: Pre-commits
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-      - name: Cache Homebrew
-        uses: actions/cache@v4
-        with:
-          path: |
-            /home/linuxbrew/.linuxbrew
-            ~/.cache/Homebrew
-          key: ${{ runner.os }}-brew-${{ hashFiles('.github/workflows/ci.yml') }}
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@main
-      - name: Install and upgrade pre-commit, tflint, trivy
-        run: |
-          brew update
-          brew install pre-commit tflint trivy
-          brew upgrade pre-commit tflint trivy
-      - name: Cache pre-commits
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pre-commit
-          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
-      - name: Install terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-      - name: Install pre-commit hooks
-        run: pre-commit install
-    # Trivy and TFLint are run via pre-commit hooks
-      - name: Run pre-commit checks
-        run: pre-commit run --show-diff-on-failure --color=always --all-files
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Set up Homebrew
+      uses: Homebrew/actions/setup-homebrew@main
+    - name: Install pre-commit, trivy, and tflint with Homebrew
+      run: |
+        brew install pre-commit trivy tflint
+    - name: Cache pre-commits
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
+    - name: Install terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+    - name: Install pre-commit checks
+      run: |
+        pre-commit install
+    - name: Run pre-commit checks
+      run: |
+        pre-commit run --show-diff-on-failure --color=always --all-files
