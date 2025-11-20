@@ -1,5 +1,5 @@
 # terraform-template
-A starter template for creating reusable Terraform modules with best practices built in.
+A starter template for creating reusable Terraform repos with best practices built in.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
