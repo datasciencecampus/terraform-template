@@ -43,15 +43,62 @@ repos:
     rev: "v0.20.0"
     hooks:
       - id: terraform-docs-go
-        name: terraform-docs (module)
+        name: terraform-docs (common)
         language_version: "1.24.6"
         args:
           - "markdown"
           - "table"
           - "--output-file"
           - "README.md"
-          - "."
-
+          - "terraform/0_common"
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.20.0"
+    hooks:
+      - id: terraform-docs-go
+        name: terraform-docs (sandbox)
+        language_version: "1.24.6"
+        args:
+          - "markdown"
+          - "table"
+          - "--output-file"
+          - "README.md"
+          - "terraform/1_sandbox"
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.20.0"
+    hooks:
+      - id: terraform-docs-go
+        name: terraform-docs (dev)
+        language_version: "1.24.6"
+        args:
+          - "markdown"
+          - "table"
+          - "--output-file"
+          - "README.md"
+          - "terraform/2_dev"
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.20.0"
+    hooks:
+      - id: terraform-docs-go
+        name: terraform-docs (staging)
+        language_version: "1.24.6"
+        args:
+          - "markdown"
+          - "table"
+          - "--output-file"
+          - "README.md"
+          - "terraform/3_staging"
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.20.0"
+    hooks:
+      - id: terraform-docs-go
+        name: terraform-docs (prod)
+        language_version: "1.24.6"
+        args:
+          - "markdown"
+          - "table"
+          - "--output-file"
+          - "README.md"
+          - "terraform/4_prod"
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.7
     hooks:
